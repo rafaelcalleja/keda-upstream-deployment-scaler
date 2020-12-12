@@ -1,0 +1,13 @@
+{
+  "name": "rafaelcalleja/keda-upstream-deployment-scaler",
+  "description": "gRPC Keda External Scaler for PHP",
+  "require": {
+    "spiral/php-grpc": "^v1.4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Externalscaler\\": "Externalscaler/",
+      "GPBMetadata\\": "GPBMetadata/"
+    }
+  }
+}
