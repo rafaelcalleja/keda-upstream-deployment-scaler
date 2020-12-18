@@ -36,7 +36,7 @@ jobs:
            git push
            echo ::set-output name=sha::$(git rev-parse --short HEAD)
            git rev-parse --symbolic-full-name --remotes=origin
-      - uses: passeidireto/trigger-external-workflow-action@main
+      - uses: passeidireto/trigger-external-workflow-action@v1.0.0
         env:
           TAG_NAME: ${{ steps.release.outputs.tag_name }}
           SHA: ${{ steps.updatev.outputs.sha }}
