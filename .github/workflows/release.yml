@@ -18,8 +18,6 @@ jobs:
       sha: ${{ steps.updatev.outputs.sha }}
     steps:
       - name: Checkout code
-        with:
-          fetch-depth: 0
         uses: actions/checkout@v2
       - name: Compute next SemVer tag
         id: release
