@@ -23,6 +23,13 @@ jobs:
           echo $VERSION > VERSION
           echo ::debug ::relase version ${VERSION}
           echo ::set-output name=tag_name::v${VERSION}
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v5
+        with:
+          author_name: Github Action
+          author_email: rafaelcalleja@gmail.com
+          message: 'bump version'
+          add: 'VERSION'
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
@@ -36,10 +43,3 @@ jobs:
             docker pull rafaelcalleja/keda-upstream-deployment-scaler:${{ steps.release.outputs.tag_name }}
           draft: false
           prerelease: false
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v5
-        with:
-          author_name: Github Action
-          author_email: rafaelcalleja@gmail.com
-          message: 'bump version'
-          add: 'VERSION'
