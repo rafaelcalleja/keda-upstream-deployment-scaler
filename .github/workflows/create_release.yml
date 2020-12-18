@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: env
-      - name: Check Output Parameters
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
