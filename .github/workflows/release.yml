@@ -26,13 +26,14 @@ jobs:
 
 
       - name: Update version
-
+        id: updatev
         run: |
            git config user.name  github-actions
            git config user.email github-actions@github.com
            git add VERSION
            git commit -m "bump version"
            git push
+           echo ::set-output name=sha::$(git rev-parse --short HEAD)
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
@@ -46,3 +47,4 @@ jobs:
             docker pull rafaelcalleja/keda-upstream-deployment-scaler:${{ steps.release.outputs.tag_name }}
           draft: false
           prerelease: false
+          commitish: ${{ steps.updatev.outputs.sha }}
