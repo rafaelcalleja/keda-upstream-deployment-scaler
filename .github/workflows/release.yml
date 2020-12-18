@@ -37,6 +37,8 @@ jobs:
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
           echo "Got Sha ${{ steps.updatev.outputs.sha }}"
       - uses: actions/checkout@v2
+        with:
+          clean: false
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
