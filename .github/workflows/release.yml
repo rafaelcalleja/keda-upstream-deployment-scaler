@@ -30,6 +30,8 @@ jobs:
           author_email: rafaelcalleja@gmail.com
           message: 'bump version'
           add: 'VERSION'
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
