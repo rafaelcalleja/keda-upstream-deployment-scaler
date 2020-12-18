@@ -23,21 +23,22 @@ jobs:
           echo $VERSION > VERSION
           echo ::debug ::relase version ${VERSION}
           echo ::set-output name=tag_name::v${VERSION}
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v5
-        with:
-          author_name: Github Action
-          author_email: rafaelcalleja@gmail.com
-          message: 'bump version'
-          add: 'VERSION'
+
+
       - name: Checkout code
         uses: actions/checkout@v2
+        run: |
+           git config user.name  github-actions
+           git config user.email github-actions@github.com
+           git add VERSION
+           git commit -m "bump version"
+           git push
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actionscreate-release@v1
         with:
           tag_name: ${{ steps.release.outputs.tag_name }}
           release_name: Release ${{ steps.release.outputs.tag_name }}
