@@ -41,15 +41,11 @@ jobs:
     needs: build
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    container:
-      image: docker://rafaelcalleja/dind-buster:v0.1.8
-      options: --privileged
     steps:
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{needs.build.outputs.tag_name}}"
           echo "Got Sha ${{needs.build.outputs.sha}}"
-      - uses: actions/checkout@v2
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
