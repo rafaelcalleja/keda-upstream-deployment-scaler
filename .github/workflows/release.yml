@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    container:
+      image: docker://rafaelcalleja/dind-buster:v0.1.8
+      options: --privileged
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Compute next SemVer tag
+        id: release
+        run: |
+          export VERSION=$(docker run --rm alpine/semver semver -c -i patch $(cat VERSION))
+          echo $VERSION > VERSION
+          echo ::debug ::relase version ${VERSION}
+          echo ::set-output name=tag_name::v${VERSION}
+      - name: Check Output Parameters
+        run: |
+          echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.release.outputs.tag_name }}
+          release_name: Release ${{ steps.release.outputs.tag_name }}
+          body: |
+            docker pull rafaelcalleja/keda-upstream-deployment-scaler:v${{ steps.release.outputs.tag_name }}
+          draft: false
+          prerelease: false
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v5
+        with:
+          author_name: Github Action
+          author_email: rafaelcalleja@gmail.com
+          message: 'bump version'
+          add: 'VERSION'
