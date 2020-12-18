@@ -36,34 +36,11 @@ jobs:
            git push
            echo ::set-output name=sha::$(git rev-parse --short HEAD)
            git rev-parse --symbolic-full-name --remotes=origin
-  push:
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v2
+      - uses: passeidireto/trigger-external-workflow-action@main
         env:
-          GITHUB_SHA: ${{needs.build.outputs.sha}}
+          TAG_NAME: ${{ steps.release.outputs.tag_name }}
+          SHA: ${{ steps.updatev.outputs.sha }}
         with:
-          fetch-depth: 0
-      - run: env
-        env:
-          GITHUB_SHA: ${{needs.build.outputs.sha}}
-      - name: Check Output Parameters
-        run: |
-          echo "Got tag name ${{needs.build.outputs.tag_name}}"
-          echo "Got Sha ${{needs.build.outputs.sha}}"
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_SHA: ${{needs.build.outputs.sha}}
-        with:
-          tag_name: ${{needs.build.outputs.tag_name}}
-          release_name: Release ${{needs.build.outputs.tag_name}}
-          body: |
-            docker pull rafaelcalleja/keda-upstream-deployment-scaler:${{ steps.release.outputs.tag_name }}
-          draft: false
-          prerelease: false
-          commitish: ${{needs.build.outputs.sha}}
+          repository: ${GITHUB_REPOSITORY}
+          event: release_candidate
+          github_pat: ${{ secrets.GITHUB_TOKEN }}
