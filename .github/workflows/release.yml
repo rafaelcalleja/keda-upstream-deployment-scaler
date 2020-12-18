@@ -46,7 +46,7 @@ jobs:
         env:
           GITHUB_SHA: ${{needs.build.outputs.sha}}
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - run: env
         env:
           GITHUB_SHA: ${{needs.build.outputs.sha}}
