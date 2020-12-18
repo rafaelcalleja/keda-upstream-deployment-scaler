@@ -42,6 +42,9 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - uses: actions/checkout@v2
+        env:
+          GITHUB_SHA: ${{needs.build.outputs.sha}}
       - run: env
       - name: Check Output Parameters
         run: |
@@ -50,6 +53,8 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
+        env:
+          GITHUB_SHA: ${{needs.build.outputs.sha}}
         with:
           tag_name: ${{needs.build.outputs.tag_name}}
           release_name: Release ${{needs.build.outputs.tag_name}}
