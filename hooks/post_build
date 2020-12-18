@@ -3,6 +3,10 @@
 set -x
 
 docker tag $IMAGE_NAME $DOCKER_REPO:$SOURCE_COMMIT
-docker tag $IMAGE_NAME $DOCKER_REPO:$(cat VERSION)
 docker push $DOCKER_REPO:$SOURCE_COMMIT
-docker push $DOCKER_REPO:$(cat VERSION)
+
+if ! docker pull $DOCKER_REPO:$(cat VERSION) >/dev/null 2>&1; then
+  echo "Building new version $DOCKER_REPO:$(cat VERSION)"
+  docker tag $IMAGE_NAME $DOCKER_REPO:$(cat VERSION)
+  docker push $DOCKER_REPO:$(cat VERSION)
+fi
