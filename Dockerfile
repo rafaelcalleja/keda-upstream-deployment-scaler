@@ -19,7 +19,7 @@ protoc-3.14.0-linux-x86_64.zip -o /tmp/protoc.zip && \
 
 WORKDIR /github/grpc
 
-RUN git clone https://github.com/grpc/grpc . && \
+RUN git clone --depth 1 --branch v1.34.0 https://github.com/grpc/grpc . && \
   git submodule update --init && \
   cd third_party/protobuf && git submodule update --init
 
