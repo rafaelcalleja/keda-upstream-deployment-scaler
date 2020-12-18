@@ -47,8 +47,7 @@ jobs:
                     "body": "docker pull rafaelcalleja/keda-upstream-deployment-scaler:${{ steps.release.outputs.tag_name }}",
                     "name": "Release ${{ steps.release.outputs.tag_name }}",
                     "draft": false,
-                    "prerelease": false,
-                    "target_commitish": "$(git rev-parse --short HEAD)"
+                    "prerelease": false
                 }'
 
      #- name: Push changes
