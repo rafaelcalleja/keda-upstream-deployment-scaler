@@ -37,6 +37,7 @@ jobs:
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+          echo "Got Sha ${{ steps.updatev.outputs.sha }}"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
