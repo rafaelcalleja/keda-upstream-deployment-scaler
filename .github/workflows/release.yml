@@ -49,35 +49,4 @@ jobs:
                     "draft": false,
                     "prerelease": false
                 }'
-
-     #- name: Push changes
-     #  uses: ad-m/github-push-action@master
-     #  with:
-     #    github_token: ${{ secrets.GITHUB_TOKEN}}
-     #- name: Create Release
-     #  id: create_release
-     #  uses: actions/create-release@v1
-     #  with:
-     #    tag_name: ${{ steps.release.outputs.tag_name }}
-     #    release_name: Release ${{ steps.release.outputs.tag_name }}
-     #    body: |
-     #      docker pull rafaelcalleja/keda-upstream-deployment-scaler:${{ steps.release.outputs.tag_name }}
-     #    draft: false
-     #    prerelease: false
-     #- name: Create issue using REST API
-     #  env:
-     #    GITHUB_SHA: ${{ steps.updatev.outputs.sha }}
-     #  run: |
-     #    curl --request POST \
-     #    --url https://api.github.com/repos/${{ github.repository }}/dispatches \
-     #    --header "Accept: application/vnd.github.v3+json" \
-     #    --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-     #    --header 'content-type: application/json' \
-     #    --data '{"event_type": "release_candidate"}'
-     #- name: Repository Dispatch
-     #  uses: peter-evans/repository-dispatch@v1
-     #  with:
-     #    token: ${{ secrets.REPO_ACCESS_TOKEN }}
-     #    repository: rafaelcalleja/keda-upstream-deployment-scaler
-     #    event-type: release_candidate
-     #     client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+           exit $?
