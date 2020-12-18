@@ -36,11 +36,18 @@ jobs:
            git push
            echo ::set-output name=sha::$(git rev-parse --short HEAD)
            git rev-parse --symbolic-full-name --remotes=origin
-      - uses: passeidireto/trigger-external-workflow-action@v1.0.0
-        env:
-          TAG_NAME: ${{ steps.release.outputs.tag_name }}
-          SHA: ${{ steps.updatev.outputs.sha }}
-        with:
-          repository: ${GITHUB_REPOSITORY}
-          event: release_candidate
-          github_pat: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create issue using REST API
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/dispatches \
+          --header "Accept: application/vnd.github.v3+json" \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{"event_type": "release_candidate"}'
+     #- name: Repository Dispatch
+     #  uses: peter-evans/repository-dispatch@v1
+     #  with:
+     #    token: ${{ secrets.REPO_ACCESS_TOKEN }}
+     #    repository: rafaelcalleja/keda-upstream-deployment-scaler
+     #    event-type: release_candidate
+     #     client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
