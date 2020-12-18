@@ -32,6 +32,7 @@ jobs:
            git commit -m "bump version"
            git push
            echo ::set-output name=sha::$(git rev-parse --short HEAD)
+           git rev-parse --symbolic-full-name --remotes=origin
       - name: Check Output Parameters
         run: |
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
