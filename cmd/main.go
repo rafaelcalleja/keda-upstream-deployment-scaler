@@ -15,9 +15,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/jenkins-x/jx-kube-client/v3/pkg/kubeclient"
+	discovery "github.com/gkarthiks/k8s-discovery"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 
 type ExternalScaler struct{}
@@ -111,16 +112,16 @@ func (e *ExternalScaler) StreamIsActive(scaledObject *pb.ScaledObjectRef, epsSer
 var kubeClient *kubernetes.Clientset
 
 func main() {
-	f := kubeclient.NewFactory()
-	cfg, err := f.CreateKubeConfig()
+	k8sCli, err := discovery.NewK8s()
+
 	if err != nil {
-		log.Fatal(fmt.Sprintf("failed to get kubernetes config: %v", err))
+		log.Fatal(err, "discovering new Kubernetes config")
 		os.Exit(1)
 	}
 
-	kubeClient, err = kubernetes.NewForConfig(cfg)
+	kubeClient, err = kubernetes.NewForConfig(k8sCli.RestConfig)
 	if err != nil {
-		log.Fatal(fmt.Sprintf("error building kubernetes clientset: %v", err))
+		log.Fatal(err, "creating new Kubernetes ClientSet")
 		os.Exit(1)
 	}
 
