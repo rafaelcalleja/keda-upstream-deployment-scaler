@@ -25,7 +25,7 @@ jobs:
           export VERSION=$(docker run --rm alpine/semver semver -c -i patch $(cat VERSION))
           echo $VERSION > VERSION
           echo ::debug ::relase version ${VERSION}
-          echo ::set-output name=tag_name::v${VERSION}
+          echo ::set-output name=tag_name::${VERSION}
       - name: Update version
         id: updatev
         run: |
@@ -41,7 +41,7 @@ jobs:
                 --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
                 --header 'content-type: application/json' \
                 --data '{
-                    "tag_name": "${{ steps.release.outputs.tag_name }}",
+                    "tag_name": "v${{ steps.release.outputs.tag_name }}",
                     "body": "docker pull rafaelcalleja/keda-upstream-deployment-scaler:${{ steps.release.outputs.tag_name }}",
                     "name": "Release ${{ steps.release.outputs.tag_name }}",
                     "draft": false,
